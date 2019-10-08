@@ -1,0 +1,8 @@
+delete
+delete
+delete
+delete
+get
+post
+post
+post

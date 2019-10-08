@@ -1,11 +1,11 @@
-from app import api, app, jwt_required, current_identity
+from app import api, app
 
+# Routes
+from methods.RestTEST import Hello
+from methods.Organisation import Organisation
 
-@app.route('/protected')
-
-def protected():
-    return '{}'.format(current_identity)
-
+api.add_resource(Hello, '/Hello')
+api.add_resource(Organisation, '/Organisation')
 
 if __name__ == "__main__":
     app.run(debug=True)
