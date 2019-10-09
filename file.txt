@@ -6,3 +6,4 @@ get
 post
 post
 post
+get

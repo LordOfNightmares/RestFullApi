@@ -1,5 +1,5 @@
 from flask_restful import Resource
-from app import jwt_required
+from flask_jwt import jwt_required
 
 
 class AuthenticatedResource(Resource):

@@ -8,8 +8,6 @@ username_table = {u.username: u for u in users}
 userid_table = {u.id: u for u in users}
 
 
-
-
 def config():
     from datetime import timedelta
     return {'APPLICATION_ROOT': '/',

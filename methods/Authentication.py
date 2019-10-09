@@ -18,7 +18,7 @@
 #         return str(token) in self.yaml.load(open(self.file))['token']
 #
 
-class Auth:
+class ConnectionAuth:
     def __init__(self, username_table, userid_table):
         self.username_table = username_table
         self.userid_table = userid_table

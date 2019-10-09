@@ -1,9 +1,12 @@
 from flask import Blueprint
-from flask_restful import Api
-from flask_jwt import JWT, jwt_required, current_identity
-from config import config, userid_table, username_table
 from flask import Flask
-from methods.Authentication import Auth
+from flask_jwt import JWT
+from flask_restful import Api
+from pony.orm.core import Database
+
+from config import config, userid_table, username_table
+from methods.Authentication import ConnectionAuth
+from sql.Connection import DbAuth
 
 app = Flask(__name__)
 app.config = config()
@@ -11,10 +14,17 @@ app.config = config()
 api_bp = Blueprint('api', __name__)
 api = Api(api_bp)
 app.register_blueprint(api_bp, url_prefix='/api')
-# Authentication
-auth = Auth(username_table, userid_table)
+
+# Authentication to server
+auth = ConnectionAuth(username_table, userid_table)
 jwt = JWT(app, auth.authenticate, auth.identity)
 
+# Authentication/connection to database
+dbAuth = dict(DbAuth('config.yaml').load())
+db = Database()
+db.bind(**dbAuth['sqlite'])
+
+# pprint()
 # @app.route('/protected')
 # @jwt_required
 # def protected():
