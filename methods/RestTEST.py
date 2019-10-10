@@ -1,4 +1,4 @@
-from methods.Resource import AuthenticatedResource
+from methods.Authentication import AuthenticatedResource
 
 
 class Hello(AuthenticatedResource):

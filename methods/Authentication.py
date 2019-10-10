@@ -1,22 +1,10 @@
-# class Token_auth:
-#     def __init__(self, file):
-#         from ruamel.yaml import YAML
-#         self.yaml = YAML()
-#         self.file = file
-#
-#     def add_token(self, token="test"):
-#         token = str(token)
-#         try:
-#             data = self.yaml.load(open(self.file))
-#             if token not in data['token']:
-#                 data['token'].append(token)
-#         except:
-#             data = {'token': [token]}
-#         self.yaml.dump(data, open(self.file, 'w'))
-#
-#     def load_token(self, token):
-#         return str(token) in self.yaml.load(open(self.file))['token']
-#
+from flask_jwt import jwt_required
+from flask_restful import Resource
+
+
+class AuthenticatedResource(Resource):
+    method_decorators = [jwt_required()]
+
 
 class ConnectionAuth:
     def __init__(self, username_table, userid_table):
@@ -33,4 +21,3 @@ class ConnectionAuth:
     def identity(self, payload):
         user_id = payload['identity']
         return self.userid_table.get(user_id, None)
-

@@ -1,13 +1,13 @@
 from flask import request, make_response, jsonify
-from flask_restful import Resource
 
+# from flask_restful import Resource
+from methods.Authentication import AuthenticatedResource
 from sql.DatabaseModel import DatabaseMethods
 from sql.Databases import Organisation
 
 
-class OrganisationHTTP(Resource):
+class OrganisationHTTP(AuthenticatedResource):
     def __init__(self):
-        self.file = open("file.txt", 'a')
         self.OrgDB = DatabaseMethods(Organisation)
         self.page = open('org.html', 'r').read().replace('\n', '')
 
