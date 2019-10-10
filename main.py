@@ -1,11 +1,10 @@
 from app import api, app
-
+from methods.Organisation import Organisation1, Organisation2
 # Routes
 from methods.RestTEST import Hello
-from methods.Organisation import OrganisationHTTP
 
 api.add_resource(Hello, '/Hello')
-api.add_resource(OrganisationHTTP, '/Organisation')
-
+api.add_resource(Organisation1, '/Organisation')
+api.add_resource(Organisation2, '/Organisation/<int:id>')
 if __name__ == "__main__":
     app.run(debug=True)

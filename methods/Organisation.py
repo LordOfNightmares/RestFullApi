@@ -1,67 +1,51 @@
-from flask import jsonify
+from flask import request, make_response, jsonify
+from flask_restful import Resource
 
-from methods.Resource import AuthenticatedResource
 from sql.DatabaseModel import DatabaseMethods
 from sql.Databases import Organisation
 
-class OrganisationHTTP(AuthenticatedResource):
+
+class OrganisationHTTP(Resource):
     def __init__(self):
         self.file = open("file.txt", 'a')
         self.OrgDB = DatabaseMethods(Organisation)
+        self.page = open('org.html', 'r').read().replace('\n', '')
 
+    def rsp(self):
+        return make_response("<br>".join('{}'.format(k) for k in [self.page, self.content, self.current()]))
+
+    def current(self):
+        return str(self.OrgDB.__all__())
 
     def post(self):
-        # implement the json content type input
-        self.OrgDB.__add__("Onee", "Twoe", "Threee")
+        name = request.form['Name']
+        desc = request.form['Description']
+        pos = request.form['Position']
+        self.content = str(self.OrgDB.__add__(name, desc, pos))
+        return self.rsp()
 
     def put(self):
-        # implement the json content type input
-        self.OrgDB.__update__(1, "Onee", "Twoe", "Threee")
+        self.content = str(self.OrgDB.__update__(**request.get_json()))
+        return self.rsp()
 
-    def delete(self):
-        self.OrgDB.__delete__(13)
+    def delete(self, id):
+        # id = request.args
+        self.content = str(self.OrgDB.__delete__(id))
+        return self.rsp()
 
     def get(self):
-        return jsonify(self.OrgDB.__all__())
-        # implement page
-        # self.OrgDB.__get__(40)
+        self.content = str(self.OrgDB.__all__())
+        return make_response("<br>".join('{}'.format(k) for k in [self.page, self.content]))
 
-# organisation = [
-#     {'id': 0,
-#      'name': 'O1',
-#      'description': 'salary',
-#      'amount': 5000}
-# ]
 
-#
-# class Repository(object):
-#     def __init__(self):
-#         self.repos = {}
-#
-#     def add(self, repo):
-#         self.repos[repo.get_id()] = repo
-#
-#     def get_id(self):
-#         return self.id
-#
-#     def all(self):
-#         return self.repos
-#
-#     def get(self, id):
-#         return self.repos[id]
-#
-#     def __str__(self):
-#         # _dict = dict(self)
-#         # return "{" + ",\n ".join('{}:\'{}\''.format(k, _dict[k]) for k in _dict.keys()) + "}"
-#         import json
-#         return json.dump(dict(self))
-#
-#
-# class Organisation(object):
-#     def __init__(self, name, description):
-#         self.id = 0
-#         self.name = name
-#         self.description = description
-#
-#     def __repr__(self):
-#         return "<User(id='{}', name='{}', description='{}')>" % (self.id, self.name, self.description)
+class Organisation1(OrganisationHTTP):
+    def __init__(self):
+        super().__init__()
+
+    def delete(self):
+        return jsonify("Please input id.")
+
+
+class Organisation2(OrganisationHTTP):
+    def __init__(self):
+        super().__init__()

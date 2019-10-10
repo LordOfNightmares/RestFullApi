@@ -13,6 +13,7 @@ class DatabaseMethods:
                           'Description': args[1],
                           'Position': args[2]}
         self.cls(**kwargs)
+        return kwargs
 
     @db_session
     def __update__(self, *args, **kwargs):
@@ -22,7 +23,9 @@ class DatabaseMethods:
                           'Name': args[1],
                           'Description': args[2],
                           'Position': args[3]}
-        self.cls.set(**kwargs)
+        print(kwargs)
+        self.cls.set(self.cls[kwargs['id']], **kwargs)
+        return kwargs
 
     @db_session
     def __get__(self, id):
@@ -34,7 +37,7 @@ class DatabaseMethods:
     @db_session
     def __delete__(self, id):
         try:
-            elm = self.cls[id]
+            elm = self.__get__(id)
             self.cls[id].delete()
             return "{} was deleted".format(elm)
         except Exception as e:
