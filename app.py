@@ -19,16 +19,9 @@ app.register_blueprint(api_bp, url_prefix='/api')
 auth = ConnectionAuth(username_table, userid_table)
 jwt = JWT(app, auth.authenticate, auth.identity)
 
-# Authentication/connection to database
+# Authentication/connection config.yaml to database
 dbAuth = dict(DbAuth('config.yaml').load())
 db = Database()
 db.bind(**dbAuth['sqlite'])
 
-# pprint()
-# @app.route('/protected')
-# @jwt_required
-# def protected():
-#     return {'{}'.format(current_identity)}
-#
-#
-# app.route('/protected')(jwt_required()(protected()))
+

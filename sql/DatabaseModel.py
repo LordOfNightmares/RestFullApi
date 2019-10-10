@@ -1,4 +1,4 @@
-from pony.orm.core import db_session
+from pony.orm.core import db_session, commit
 
 
 class DatabaseMethods:
@@ -12,7 +12,9 @@ class DatabaseMethods:
                 kwargs = {'Name': args[0],
                           'Description': args[1],
                           'Position': args[2]}
-        self.cls(**kwargs)
+        current = self.cls(**kwargs)
+        commit()
+        kwargs.update({'id': current.id})
         return kwargs
 
     @db_session
