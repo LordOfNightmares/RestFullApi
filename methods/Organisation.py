@@ -13,19 +13,37 @@ class OrganisationHTTP(AuthenticatedResource):
         self.OrgDB = DatabaseMethods(Organisation)
         self.content = ''
 
+    def request_data(self):
+        if request.get_json():
+            data = request.get_json()
+        else:
+            data = request.form.to_dict()
+        return data
+
     def post(self, *args, **kwargs):
-        self.content = str(self.OrgDB.__add__(**request.get_json()))
+        data = self.request_data()
+        if 'id' in data and self.OrgDB.__get__(data['id']):
+            del data['id']
+        self.content = str(self.OrgDB.__add__(**data))
         return make_response(self.content)
 
     def patch(self, *args, **kwargs):
-        self.content = str(self.OrgDB.__update__(**request.get_json()))
+        data = self.request_data()
+        self.content = str(self.OrgDB.__update__(**data))
         return make_response(self.content)
 
     def delete(self, *args, **kwargs):
+        if 'id' in self.request_data():
+            self.content = str(self.OrgDB.__delete__(self.request_data()['id']))
+            return make_response(self.content)
         return jsonify("Please input id.")
 
     def get(self, *args, **kwargs):
-        self.content = str(self.OrgDB.__all__())
+        dataset = self.OrgDB.__all__()
+        header = dataset[0].keys()
+        rows = [list(x.values()) for x in dataset]
+        from terminaltables import AsciiTable
+        self.content = str(AsciiTable([[*header], *rows]).table)
         return make_response(self.content)
 
 
@@ -43,9 +61,11 @@ class Organisation2(OrganisationHTTP):
         return make_response(self.content)
 
     def patch(self, id):
-        self.content = str(self.OrgDB.__update__(id, **request.get_json()))
+        data = self.request_data()
+        data.update({'id': id})
+        self.content = str(self.OrgDB.__update__(**data))
         return make_response(self.content)
 
     def get(self, id):
-        self.content = str(self.OrgDB.__delete__(id))
+        self.content = str(self.OrgDB.__get__(id))
         return make_response(self.content)

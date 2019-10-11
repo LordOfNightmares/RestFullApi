@@ -1,4 +1,10 @@
+from datetime import datetime
+
 from pony.orm.core import db_session, commit
+
+
+def now():
+    return int(datetime.timestamp(datetime.now()))
 
 
 class DatabaseMethods:
@@ -12,6 +18,10 @@ class DatabaseMethods:
                 kwargs = {'Name': args[0],
                           'Description': args[1],
                           'Position': args[2]}
+        just_now = now()
+        kwargs.update({'created': just_now,
+                       'modified': just_now,
+                       'accessed': just_now})
         current = self.cls(**kwargs)
         commit()
         kwargs.update({'id': current.id})
@@ -25,14 +35,19 @@ class DatabaseMethods:
                           'Name': args[1],
                           'Description': args[2],
                           'Position': args[3]}
-        print(kwargs)
+        just_now = now()
+        kwargs.update({'modified': just_now,
+                       'accessed': just_now})
         self.cls.set(self.cls[kwargs['id']], **kwargs)
         return kwargs
 
     @db_session
     def __get__(self, id):
         try:
-            return self._get_dict(self.cls[id])
+            item = self._get_dict(self.cls[id])
+            item.update({'accessed': now()})
+            self.cls.set(self.cls[id], **item)
+            return item
         except Exception as e:
             return e
 

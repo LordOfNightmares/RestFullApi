@@ -4,10 +4,10 @@ sqlite:
   create_db: true
 mysql:
   provider: mysql
-  host: '#'
-  user: '#'
-  passwd: '#'
-  db: '#'
+  host: 'localhost'
+  user: 'mac'
+  passwd: '1234'
+  db: 'organisation'
 postgres:
   provider: postgres
   user: '#'
