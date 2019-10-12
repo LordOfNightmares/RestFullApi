@@ -35,9 +35,7 @@ class DatabaseMethods:
                           'Name': args[1],
                           'Description': args[2],
                           'Position': args[3]}
-        just_now = now()
-        kwargs.update({'modified': just_now,
-                       'accessed': just_now})
+        kwargs.update({'modified': now()})
         self.cls.set(self.cls[kwargs['id']], **kwargs)
         return kwargs
 
@@ -56,7 +54,7 @@ class DatabaseMethods:
         try:
             elm = self.__get__(id)
             self.cls[id].delete()
-            return "{} was deleted".format(elm)
+            return elm
         except Exception as e:
             return e
 

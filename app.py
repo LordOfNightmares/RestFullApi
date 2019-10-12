@@ -20,9 +20,10 @@ auth = ConnectionAuth(username_table, userid_table)
 jwt = JWT(app, auth.authenticate, auth.identity)
 
 # Authentication/connection config.yaml to database
-import cryptography
+# import cryptography
 db = Database()
 dbAuth = dict(DbAuth('config.yaml').load())
 db.bind(**dbAuth['mysql'])
+
 
 

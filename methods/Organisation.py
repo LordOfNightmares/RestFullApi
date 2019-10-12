@@ -39,12 +39,8 @@ class OrganisationHTTP(AuthenticatedResource):
         return jsonify("Please input id.")
 
     def get(self, *args, **kwargs):
-        dataset = self.OrgDB.__all__()
-        header = dataset[0].keys()
-        rows = [list(x.values()) for x in dataset]
-        from terminaltables import AsciiTable
-        self.content = str(AsciiTable([[*header], *rows]).table)
-        return make_response(self.content)
+        self.content = self.OrgDB.__all__()
+        return make_response(str(self.content))
 
 
 class Organisation1(OrganisationHTTP):

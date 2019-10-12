@@ -19,5 +19,6 @@ class ConnectionAuth:
             return user
 
     def identity(self, payload):
+        print(payload['identity'])
         user_id = payload['identity']
         return self.userid_table.get(user_id, None)

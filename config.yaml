@@ -7,7 +7,7 @@ mysql:
   host: 'localhost'
   user: 'mac'
   passwd: '1234'
-  db: 'organisation'
+  db: 'test3'
 postgres:
   provider: postgres
   user: '#'
